@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>680</width>
+    <width>791</width>
     <height>508</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>300</x>
      <y>410</y>
      <width>191</width>
      <height>41</height>
@@ -89,7 +89,7 @@
   <widget class="QLabel" name="Pic_Label">
    <property name="geometry">
     <rect>
-     <x>510</x>
+     <x>680</x>
      <y>410</y>
      <width>80</width>
      <height>80</height>
@@ -115,7 +115,7 @@
     <rect>
      <x>320</x>
      <y>70</y>
-     <width>301</width>
+     <width>441</width>
      <height>41</height>
     </rect>
    </property>
@@ -163,7 +163,7 @@
     <rect>
      <x>320</x>
      <y>150</y>
-     <width>301</width>
+     <width>441</width>
      <height>41</height>
     </rect>
    </property>
@@ -174,11 +174,11 @@
     </font>
    </property>
    <property name="currentText">
-    <string>Choose Period</string>
+    <string>Choose Time Period</string>
    </property>
    <item>
     <property name="text">
-     <string>Choose Period</string>
+     <string>Choose Time Period</string>
     </property>
    </item>
   </widget>
@@ -187,7 +187,7 @@
     <rect>
      <x>30</x>
      <y>270</y>
-     <width>621</width>
+     <width>731</width>
      <height>111</height>
     </rect>
    </property>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'TW_Weather_FCST_UI_V01ALuzZv.ui'
+## Form generated from reading UI file 'TW_Weather_FCST_UI_V01SGeycx.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -17,11 +17,11 @@ class Ui_TW_Weather_FCST(object):
     def setupUi(self, TW_Weather_FCST):
         if not TW_Weather_FCST.objectName():
             TW_Weather_FCST.setObjectName(u"TW_Weather_FCST")
-        TW_Weather_FCST.resize(680, 508)
+        TW_Weather_FCST.resize(791, 508)
         self.Refresh_Button = QPushButton(TW_Weather_FCST)
         self.Refresh_Button.setObjectName(u"Refresh_Button")
         self.Refresh_Button.setEnabled(True)
-        self.Refresh_Button.setGeometry(QRect(250, 410, 191, 41))
+        self.Refresh_Button.setGeometry(QRect(300, 410, 191, 41))
         font = QFont()
         font.setFamily(u"Arial")
         font.setPointSize(14)
@@ -51,13 +51,13 @@ class Ui_TW_Weather_FCST(object):
         self.WillyF_Label.setAlignment(Qt.AlignJustify|Qt.AlignVCenter)
         self.Pic_Label = QLabel(TW_Weather_FCST)
         self.Pic_Label.setObjectName(u"Pic_Label")
-        self.Pic_Label.setGeometry(QRect(510, 410, 80, 80))
+        self.Pic_Label.setGeometry(QRect(680, 410, 80, 80))
         self.Pic_Label.setFont(font1)
         self.Pic_Label.setAlignment(Qt.AlignCenter)
         self.Location_ComboBox = QComboBox(TW_Weather_FCST)
         self.Location_ComboBox.addItem("")
         self.Location_ComboBox.setObjectName(u"Location_ComboBox")
-        self.Location_ComboBox.setGeometry(QRect(320, 70, 301, 41))
+        self.Location_ComboBox.setGeometry(QRect(320, 70, 441, 41))
         font3 = QFont()
         font3.setFamily(u"Arial")
         font3.setPointSize(14)
@@ -70,11 +70,11 @@ class Ui_TW_Weather_FCST(object):
         self.Period_ComboBox = QComboBox(TW_Weather_FCST)
         self.Period_ComboBox.addItem("")
         self.Period_ComboBox.setObjectName(u"Period_ComboBox")
-        self.Period_ComboBox.setGeometry(QRect(320, 150, 301, 41))
+        self.Period_ComboBox.setGeometry(QRect(320, 150, 441, 41))
         self.Period_ComboBox.setFont(font3)
         self.Info_Table = QTableWidget(TW_Weather_FCST)
         self.Info_Table.setObjectName(u"Info_Table")
-        self.Info_Table.setGeometry(QRect(30, 270, 621, 111))
+        self.Info_Table.setGeometry(QRect(30, 270, 731, 111))
         font4 = QFont()
         font4.setPointSize(8)
         self.Info_Table.setFont(font4)
@@ -115,9 +115,9 @@ class Ui_TW_Weather_FCST(object):
 
         self.Location_ComboBox.setCurrentText(QCoreApplication.translate("TW_Weather_FCST", u"Choose City/County", None))
         self.List_Label_2.setText(QCoreApplication.translate("TW_Weather_FCST", u"FCST Period List:", None))
-        self.Period_ComboBox.setItemText(0, QCoreApplication.translate("TW_Weather_FCST", u"Choose Period", None))
+        self.Period_ComboBox.setItemText(0, QCoreApplication.translate("TW_Weather_FCST", u"Choose Time Period", None))
 
-        self.Period_ComboBox.setCurrentText(QCoreApplication.translate("TW_Weather_FCST", u"Choose Period", None))
+        self.Period_ComboBox.setCurrentText(QCoreApplication.translate("TW_Weather_FCST", u"Choose Time Period", None))
         self.label_4.setText(QCoreApplication.translate("TW_Weather_FCST", u"Weather Forecast Info:", None))
     # retranslateUi
 
