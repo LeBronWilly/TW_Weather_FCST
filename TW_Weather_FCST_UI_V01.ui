@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>791</width>
+    <width>913</width>
     <height>508</height>
    </rect>
   </property>
@@ -19,9 +19,9 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>410</y>
-     <width>191</width>
+     <x>410</x>
+     <y>430</y>
+     <width>181</width>
      <height>41</height>
     </rect>
    </property>
@@ -115,7 +115,7 @@
     <rect>
      <x>320</x>
      <y>70</y>
-     <width>441</width>
+     <width>481</width>
      <height>41</height>
     </rect>
    </property>
@@ -163,7 +163,7 @@
     <rect>
      <x>320</x>
      <y>150</y>
-     <width>441</width>
+     <width>481</width>
      <height>41</height>
     </rect>
    </property>
@@ -187,13 +187,14 @@
     <rect>
      <x>30</x>
      <y>270</y>
-     <width>731</width>
-     <height>111</height>
+     <width>851</width>
+     <height>141</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>8</pointsize>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
     </font>
    </property>
    <property name="alternatingRowColors">
@@ -227,6 +228,54 @@
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
+  <widget class="QPushButton" name="Search_Button">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>220</y>
+     <width>181</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>14</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Search</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Pic_Label_2">
+   <property name="geometry">
+    <rect>
+     <x>890</x>
+     <y>400</y>
+     <width>80</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>16</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
   <zorder>Pic_Label</zorder>
   <zorder>List_Label</zorder>
   <zorder>WillyF_Label</zorder>
@@ -236,6 +285,8 @@
   <zorder>Period_ComboBox</zorder>
   <zorder>Info_Table</zorder>
   <zorder>label_4</zorder>
+  <zorder>Search_Button</zorder>
+  <zorder>Pic_Label_2</zorder>
  </widget>
  <resources/>
  <connections/>
