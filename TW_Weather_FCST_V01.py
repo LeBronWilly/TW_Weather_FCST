@@ -14,6 +14,9 @@ Created on 01/14, 2023 (Happy Lunar New Year!)
 # https://www.geeksforgeeks.org/python-pandas-series-str-cat-to-concatenate-string/
 # https://www.udacity.com/blog/2021/11/__init__-in-python-an-overview.html
 # https://stackoverflow.com/questions/12646326/calling-a-class-function-inside-of-init
+# https://www.geeksforgeeks.org/ways-to-filter-pandas-dataframe-by-column-values/
+# https://doc.qt.io/qt-5/qheaderview.html#ResizeMode-enum
+
 
 
 from UI_V01 import *
@@ -21,6 +24,7 @@ import pandas as pd
 import urllib.request
 import json
 import numpy as np
+from datetime import datetime
 # import warnings
 # warnings.filterwarnings("ignore")
 # pd.set_option('display.max_columns', 500)
@@ -73,46 +77,65 @@ class AppWindow(QWidget):
         self.ui = Ui_TW_Weather_FCST()
         self.ui.setupUi(self)
         self.FCST_data = None
-        # self.setWindowIcon(QIcon(".png"))
+        self.WX_img = None
+        self.setWindowIcon(QIcon("weather-forecast.png"))
         self.setup_control()
         self.show()
 
     def setup_control(self):
+        self.WX_img = QPixmap('weather-forecast.png').scaled(75, 75)
+        self.ui.Pic_Label.setPixmap(self.WX_img)
+        self.ui.Pic_Label.setAlignment(Qt.AlignCenter)
+        self.ui.Info_Table.clear()
+        self.ui.Info_Table.setColumnCount(0)
+        self.ui.Info_Table.setRowCount(0)
         self.FCST_data = FCST_data_refresh_ETL()
         self.ui.Refresh_Button.clicked.connect(self.Refresh_Button_Clicked)
         self.ui.Search_Button.clicked.connect(self.Search_Button_Clicked)
         self.ui.Location_ComboBox.clear()
-        self.ui.Location_ComboBox.addItem("Choose City/County")
+        # self.ui.Location_ComboBox.addItem("Choose City/County")
         self.ui.loc_list = sorted(set(self.FCST_data["Location"]))
         for loc in self.ui.loc_list:
             self.ui.Location_ComboBox.addItem(loc)
+        self.ui.Location_ComboBox.setCurrentText("新竹市")
         self.ui.Period_ComboBox.clear()
-        self.ui.Period_ComboBox.addItem("Choose Time Period")
-        self.ui.period_list = sorted(set(self.FCST_data["Period"]))
-        for period in self.ui.period_list:
-            self.ui.Period_ComboBox.addItem(period)
-
-
-    def Refresh_Button_Clicked(self):
-        self.ui.Info_Table.clear()
-        self.FCST_data = FCST_data_refresh_ETL()
-        self.ui.Location_ComboBox.clear()
-        self.ui.Location_ComboBox.addItem("Choose City/County")
-        self.ui.loc_list = sorted(set(self.FCST_data["Location"]))
-        for loc in self.ui.loc_list:
-            self.ui.Location_ComboBox.addItem(loc)
-        self.ui.Period_ComboBox.clear()
-        self.ui.Period_ComboBox.addItem("Choose Time Period")
+        # self.ui.Period_ComboBox.addItem("Choose Time Period")
         self.ui.Period_ComboBox.addItem("All")
         self.ui.period_list = sorted(set(self.FCST_data["Period"]))
         for period in self.ui.period_list:
             self.ui.Period_ComboBox.addItem(period)
+        self.ui.Update_Time_Label.setText("Data Last Updated: " + datetime.now().strftime("%Y/%d/%m %H:%M:%S"))
+
+
+    def Refresh_Button_Clicked(self):
+        self.ui.Info_Table.clear()
+        self.ui.Info_Table.setColumnCount(0)
+        self.ui.Info_Table.setRowCount(0)
+        self.FCST_data = FCST_data_refresh_ETL()
+        self.ui.Location_ComboBox.clear()
+        # self.ui.Location_ComboBox.addItem("Choose City/County")
+        self.ui.loc_list = sorted(set(self.FCST_data["Location"]))
+        for loc in self.ui.loc_list:
+            self.ui.Location_ComboBox.addItem(loc)
+        self.ui.Location_ComboBox.setCurrentText("新竹市")
+        self.ui.Period_ComboBox.clear()
+        # self.ui.Period_ComboBox.addItem("Choose Time Period")
+        self.ui.Period_ComboBox.addItem("All")
+        self.ui.period_list = sorted(set(self.FCST_data["Period"]))
+        for period in self.ui.period_list:
+            self.ui.Period_ComboBox.addItem(period)
+        self.ui.Update_Time_Label.setText("Data Last Updated: " + datetime.now().strftime("%Y/%d/%m %H:%M:%S"))
+
 
     def Search_Button_Clicked(self):
         self.ui.Info_Table.clear()
         df_table = self.FCST_data.copy()[["Period", "Location", "Weather FCST", "Temperature",
                                           "PoP", "Comfort Index"]]
-        df_table = df_table.loc[df_table["Location"] == self.ui.Location_ComboBox.currentText()]
+        if self.ui.Period_ComboBox.currentText() == "All":
+            df_table = df_table[df_table["Location"] == self.ui.Location_ComboBox.currentText()]
+        else:
+            df_table = df_table[(df_table["Location"] == self.ui.Location_ComboBox.currentText()) &
+                                (df_table["Period"] == self.ui.Period_ComboBox.currentText())]
         df_table_nrows = df_table.shape[0]
         df_table_ncolumns = df_table.shape[1]
         df_table_columns_names = df_table.columns
@@ -128,9 +151,6 @@ class AppWindow(QWidget):
                 new_item.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                 self.ui.Info_Table.setItem(i, j, new_item)
                 self.ui.Info_Table.horizontalHeader().setSectionResizeMode(j, QHeaderView.ResizeToContents)
-
-
-
 
 
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'TW_Weather_FCST_UI_V01GoFzbx.ui'
+## Form generated from reading UI file 'TW_Weather_FCST_UI_V01htlrUe.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -51,7 +51,7 @@ class Ui_TW_Weather_FCST(object):
         self.WillyF_Label.setAlignment(Qt.AlignJustify|Qt.AlignVCenter)
         self.Pic_Label = QLabel(TW_Weather_FCST)
         self.Pic_Label.setObjectName(u"Pic_Label")
-        self.Pic_Label.setGeometry(QRect(680, 410, 80, 80))
+        self.Pic_Label.setGeometry(QRect(730, 420, 80, 80))
         self.Pic_Label.setFont(font1)
         self.Pic_Label.setAlignment(Qt.AlignCenter)
         self.Location_ComboBox = QComboBox(TW_Weather_FCST)
@@ -101,6 +101,12 @@ class Ui_TW_Weather_FCST(object):
         self.Pic_Label_2.setGeometry(QRect(890, 400, 80, 80))
         self.Pic_Label_2.setFont(font1)
         self.Pic_Label_2.setAlignment(Qt.AlignCenter)
+        self.Update_Time_Label = QLabel(TW_Weather_FCST)
+        self.Update_Time_Label.setObjectName(u"Update_Time_Label")
+        self.Update_Time_Label.setGeometry(QRect(470, 10, 411, 31))
+        self.Update_Time_Label.setFont(font2)
+        self.Update_Time_Label.setLayoutDirection(Qt.RightToLeft)
+        self.Update_Time_Label.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.Pic_Label.raise_()
         self.List_Label.raise_()
         self.WillyF_Label.raise_()
@@ -112,6 +118,7 @@ class Ui_TW_Weather_FCST(object):
         self.label_4.raise_()
         self.Search_Button.raise_()
         self.Pic_Label_2.raise_()
+        self.Update_Time_Label.raise_()
 
         self.retranslateUi(TW_Weather_FCST)
 
@@ -134,5 +141,6 @@ class Ui_TW_Weather_FCST(object):
         self.label_4.setText(QCoreApplication.translate("TW_Weather_FCST", u"Weather Forecast Info:", None))
         self.Search_Button.setText(QCoreApplication.translate("TW_Weather_FCST", u"Search", None))
         self.Pic_Label_2.setText("")
+        self.Update_Time_Label.setText("")
     # retranslateUi
 
