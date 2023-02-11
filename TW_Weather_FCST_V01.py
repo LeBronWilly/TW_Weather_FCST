@@ -43,6 +43,7 @@ def FCST_data_refresh_ETL():
                                       ],
                                 )
     data_df.columns = [x.split(".")[-1] for x in data_df.columns]
+    data_df["locationName"].replace("臺", "台", inplace=True, regex=True)
     data_df["parameterUnit"].replace("百分比", "%", inplace=True)
     data_df["parameterUnit"].replace("C", "°C", inplace=True)
     data_df["parameterUnit"].replace(np.nan, "", inplace=True)
@@ -108,6 +109,7 @@ class AppWindow(QWidget):
 
 
     def Refresh_Button_Clicked(self):
+        current_loc = self.ui.Location_ComboBox.currentText()
         self.ui.Info_Table.clear()
         self.ui.Info_Table.setColumnCount(0)
         self.ui.Info_Table.setRowCount(0)
@@ -117,7 +119,7 @@ class AppWindow(QWidget):
         self.ui.loc_list = sorted(set(self.FCST_data["Location"]))
         for loc in self.ui.loc_list:
             self.ui.Location_ComboBox.addItem(loc)
-        self.ui.Location_ComboBox.setCurrentText("新竹市")
+        self.ui.Location_ComboBox.setCurrentText(current_loc)
         self.ui.Period_ComboBox.clear()
         # self.ui.Period_ComboBox.addItem("Choose Time Period")
         self.ui.Period_ComboBox.addItem("All")
