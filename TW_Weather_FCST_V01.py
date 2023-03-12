@@ -18,13 +18,14 @@ Created on 01/14, 2023 (Happy Lunar New Year!)
 # https://doc.qt.io/qt-5/qheaderview.html#ResizeMode-enum
 
 
-
 from UI_V01 import *
 import pandas as pd
 import urllib.request
 import json
 import numpy as np
 from datetime import datetime
+
+
 # import warnings
 # warnings.filterwarnings("ignore")
 # pd.set_option('display.max_columns', 500)
@@ -78,14 +79,22 @@ class AppWindow(QWidget):
         self.ui = Ui_TW_Weather_FCST()
         self.ui.setupUi(self)
         self.FCST_data = None
-        self.WX_img = None
-        self.setWindowIcon(QIcon("weather-forecast.png"))
+        # self.WX_img = None
+        # self.setWindowIcon(QIcon("weather-forecast.png"))
         self.setup_control()
         self.show()
 
     def setup_control(self):
-        self.WX_img = QPixmap('weather-forecast.png').scaled(75, 75)
-        self.ui.Pic_Label.setPixmap(self.WX_img)
+        self.ui.WinIcon_img = QPixmap()
+        url = 'https://raw.githubusercontent.com/LeBronWilly/TW_Weather_FCST/main/weather-forecast.png'
+        img_data = urllib.request.urlopen(url).read()
+        self.ui.WinIcon_img.loadFromData(img_data)
+        self.ui.WinIcon_img = self.ui.WinIcon_img.scaled(75, 75)
+        self.setWindowIcon(QIcon(self.ui.WinIcon_img))
+        # self.WX_img = QPixmap('weather-forecast.png').scaled(75, 75)
+        # self.WX_img = self.ui.WinIcon_img
+        # self.ui.Pic_Label.setPixmap(self.WX_img)
+        self.ui.Pic_Label.setPixmap(self.ui.WinIcon_img)
         self.ui.Pic_Label.setAlignment(Qt.AlignCenter)
         self.ui.Info_Table.clear()
         self.ui.Info_Table.setColumnCount(0)
@@ -107,7 +116,6 @@ class AppWindow(QWidget):
             self.ui.Period_ComboBox.addItem(period)
         self.ui.Update_Time_Label.setText("Data Last Updated: " + datetime.now().strftime("%Y/%d/%m %H:%M:%S"))
 
-
     def Refresh_Button_Clicked(self):
         current_loc = self.ui.Location_ComboBox.currentText()
         self.ui.Info_Table.clear()
@@ -127,7 +135,6 @@ class AppWindow(QWidget):
         for period in self.ui.period_list:
             self.ui.Period_ComboBox.addItem(period)
         self.ui.Update_Time_Label.setText("Data Last Updated: " + datetime.now().strftime("%Y/%d/%m %H:%M:%S"))
-
 
     def Search_Button_Clicked(self):
         self.ui.Info_Table.clear()
@@ -155,13 +162,10 @@ class AppWindow(QWidget):
                 self.ui.Info_Table.horizontalHeader().setSectionResizeMode(j, QHeaderView.ResizeToContents)
 
 
-
 if __name__ == "__main__":
     import sys
+
     app = QApplication(sys.argv)
     TW_Weather_FCST = AppWindow()
     TW_Weather_FCST.show()
     sys.exit(app.exec_())
-
-
-
