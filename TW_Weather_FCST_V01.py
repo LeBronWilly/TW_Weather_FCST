@@ -25,6 +25,10 @@ import json
 import numpy as np
 from datetime import datetime
 
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
 
 # import warnings
 # warnings.filterwarnings("ignore")
@@ -169,3 +173,4 @@ if __name__ == "__main__":
     TW_Weather_FCST = AppWindow()
     TW_Weather_FCST.show()
     sys.exit(app.exec_())
+    input("WillyF")
