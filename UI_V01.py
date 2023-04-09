@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'TW_Weather_FCST_UI_V01htlrUe.ui'
+## Form generated from reading UI file 'TW_Weather_FCST_UI_V01jgfZcS.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -30,7 +30,7 @@ class Ui_TW_Weather_FCST(object):
         self.Refresh_Button.setFont(font)
         self.List_Label = QLabel(TW_Weather_FCST)
         self.List_Label.setObjectName(u"List_Label")
-        self.List_Label.setGeometry(QRect(30, 70, 301, 41))
+        self.List_Label.setGeometry(QRect(30, 150, 301, 41))
         font1 = QFont()
         font1.setFamily(u"Arial")
         font1.setPointSize(16)
@@ -57,20 +57,20 @@ class Ui_TW_Weather_FCST(object):
         self.Location_ComboBox = QComboBox(TW_Weather_FCST)
         self.Location_ComboBox.addItem("")
         self.Location_ComboBox.setObjectName(u"Location_ComboBox")
-        self.Location_ComboBox.setGeometry(QRect(320, 70, 481, 41))
+        self.Location_ComboBox.setGeometry(QRect(320, 150, 481, 41))
         font3 = QFont()
         font3.setFamily(u"Arial")
         font3.setPointSize(14)
         self.Location_ComboBox.setFont(font3)
         self.List_Label_2 = QLabel(TW_Weather_FCST)
         self.List_Label_2.setObjectName(u"List_Label_2")
-        self.List_Label_2.setGeometry(QRect(30, 150, 301, 41))
+        self.List_Label_2.setGeometry(QRect(30, 70, 301, 41))
         self.List_Label_2.setFont(font1)
         self.List_Label_2.setAlignment(Qt.AlignJustify|Qt.AlignVCenter)
         self.Period_ComboBox = QComboBox(TW_Weather_FCST)
         self.Period_ComboBox.addItem("")
         self.Period_ComboBox.setObjectName(u"Period_ComboBox")
-        self.Period_ComboBox.setGeometry(QRect(320, 150, 481, 41))
+        self.Period_ComboBox.setGeometry(QRect(320, 70, 481, 41))
         self.Period_ComboBox.setFont(font3)
         self.Info_Table = QTableWidget(TW_Weather_FCST)
         self.Info_Table.setObjectName(u"Info_Table")
@@ -112,13 +112,13 @@ class Ui_TW_Weather_FCST(object):
         self.WillyF_Label.raise_()
         self.Refresh_Button.raise_()
         self.Location_ComboBox.raise_()
-        self.List_Label_2.raise_()
-        self.Period_ComboBox.raise_()
         self.Info_Table.raise_()
         self.label_4.raise_()
         self.Search_Button.raise_()
         self.Pic_Label_2.raise_()
         self.Update_Time_Label.raise_()
+        self.List_Label_2.raise_()
+        self.Period_ComboBox.raise_()
 
         self.retranslateUi(TW_Weather_FCST)
 

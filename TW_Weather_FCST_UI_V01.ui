@@ -19,7 +19,7 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>410</x>
+     <x>390</x>
      <y>430</y>
      <width>181</width>
      <height>41</height>
@@ -41,7 +41,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>70</y>
+     <y>150</y>
      <width>301</width>
      <height>41</height>
     </rect>
@@ -114,7 +114,7 @@
    <property name="geometry">
     <rect>
      <x>320</x>
-     <y>70</y>
+     <y>150</y>
      <width>481</width>
      <height>41</height>
     </rect>
@@ -138,7 +138,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>150</y>
+     <y>70</y>
      <width>301</width>
      <height>41</height>
     </rect>
@@ -152,17 +152,17 @@
     </font>
    </property>
    <property name="text">
-    <string>FCST Period List:</string>
+    <string>Region List:</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignJustify|Qt::AlignVCenter</set>
    </property>
   </widget>
-  <widget class="QComboBox" name="Period_ComboBox">
+  <widget class="QComboBox" name="Region_ComboBox">
    <property name="geometry">
     <rect>
      <x>320</x>
-     <y>150</y>
+     <y>70</y>
      <width>481</width>
      <height>41</height>
     </rect>
@@ -174,11 +174,11 @@
     </font>
    </property>
    <property name="currentText">
-    <string>Choose Time Period</string>
+    <string>Choose Region</string>
    </property>
    <item>
     <property name="text">
-     <string>Choose Time Period</string>
+     <string>Choose Region</string>
     </property>
    </item>
   </widget>
@@ -205,9 +205,9 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>230</y>
-     <width>461</width>
-     <height>31</height>
+     <y>220</y>
+     <width>411</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
@@ -309,13 +309,13 @@
   <zorder>WillyF_Label</zorder>
   <zorder>Refresh_Button</zorder>
   <zorder>Location_ComboBox</zorder>
-  <zorder>List_Label_2</zorder>
-  <zorder>Period_ComboBox</zorder>
   <zorder>Info_Table</zorder>
   <zorder>label_4</zorder>
   <zorder>Search_Button</zorder>
   <zorder>Pic_Label_2</zorder>
   <zorder>Update_Time_Label</zorder>
+  <zorder>List_Label_2</zorder>
+  <zorder>Region_ComboBox</zorder>
  </widget>
  <resources/>
  <connections/>
