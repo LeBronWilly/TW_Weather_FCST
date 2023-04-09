@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>913</width>
+    <width>950</width>
     <height>508</height>
    </rect>
   </property>
@@ -21,7 +21,7 @@
     <rect>
      <x>390</x>
      <y>430</y>
-     <width>181</width>
+     <width>201</width>
      <height>41</height>
     </rect>
    </property>
@@ -115,7 +115,7 @@
     <rect>
      <x>320</x>
      <y>150</y>
-     <width>481</width>
+     <width>331</width>
      <height>41</height>
     </rect>
    </property>
@@ -163,7 +163,7 @@
     <rect>
      <x>320</x>
      <y>70</y>
-     <width>481</width>
+     <width>331</width>
      <height>41</height>
     </rect>
    </property>
@@ -187,7 +187,7 @@
     <rect>
      <x>30</x>
      <y>270</y>
-     <width>851</width>
+     <width>891</width>
      <height>141</height>
     </rect>
    </property>
@@ -234,9 +234,9 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>370</x>
      <y>220</y>
-     <width>181</width>
+     <width>241</width>
      <height>41</height>
     </rect>
    </property>
@@ -279,7 +279,7 @@
   <widget class="QLabel" name="Update_Time_Label">
    <property name="geometry">
     <rect>
-     <x>470</x>
+     <x>510</x>
      <y>10</y>
      <width>411</width>
      <height>31</height>

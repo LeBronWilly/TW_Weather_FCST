@@ -37,6 +37,9 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 
 def FCST_data_refresh_ETL():
+    TW_Region = pd.read_csv(
+        "https://github.com/LeBronWilly/TW_Weather_FCST/raw/main/TW_Region.csv",
+        encoding='utf8')
     data_source = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-3D27458E-8F30-4BDF-9589-6DD4A337AA74&format=JSON&locationName=&elementName=&sort=time"
     json_url = urllib.request.urlopen(data_source)
     data = json.loads(json_url.read())
@@ -48,7 +51,6 @@ def FCST_data_refresh_ETL():
                                       ],
                                 )
     data_df.columns = [x.split(".")[-1] for x in data_df.columns]
-    data_df["locationName"].replace("臺", "台", inplace=True, regex=True)
     data_df["parameterUnit"].replace("百分比", "%", inplace=True)
     data_df["parameterUnit"].replace("C", "°C", inplace=True)
     data_df["parameterUnit"].replace(np.nan, "", inplace=True)
@@ -60,19 +62,21 @@ def FCST_data_refresh_ETL():
     data_df["Parameter"] = data_df["parameterName"] + data_df["parameterUnit"]
     data_df["startTime"] = data_df["startTime"].apply(lambda x: x.replace("-", "/")[:-3])
     data_df["endTime"] = data_df["endTime"].apply(lambda x: x.replace("-", "/")[:-3])
+    data_df = data_df.merge(TW_Region, how="left", left_on='locationName', right_on='City/County',
+                            validate="many_to_one")
+    data_df["locationName"].replace("臺", "台", inplace=True, regex=True)
     data_df_pivot = pd.pivot_table(data_df,
-                                   index=["startTime", "endTime", 'locationName'],
+                                   index=["startTime", "endTime", "Region", 'locationName'],
                                    columns=["elementName"],
                                    values=["Parameter"],
                                    aggfunc=lambda x: x).reset_index()
-    data_df_pivot.columns = ["startTime", "endTime", "locationName", "Comfort Index",
+    data_df_pivot.columns = ["startTime", "endTime", "Region", "locationName", "Comfort Index",
                              "Max Temperature", "Min Temperature", "Probability of Precipitation", "Weather Forcast"]
     data_df_pivot = data_df_pivot.sort_values(by=["locationName", "startTime", "endTime"]).reset_index(drop=True)
     data_df_pivot["Period"] = data_df_pivot["startTime"].str.cat(data_df_pivot["endTime"], sep=" ~ ")
     data_df_pivot["Temperature"] = data_df_pivot["Max Temperature"].str.cat(data_df_pivot["Min Temperature"], sep=" ~ ")
     data_df_pivot = data_df_pivot.rename(
-        columns={"locationName": "Location", "Probability of Precipitation": "PoP",
-                 "Weather Forcast": "Weather FCST"},
+        columns={"locationName": "Location", "Probability of Precipitation": "PoP", "Weather Forcast": "Weather FCST"},
         errors="raise")
     return data_df_pivot
 
@@ -82,6 +86,7 @@ class AppWindow(QWidget):
         super().__init__()
         self.ui = Ui_TW_Weather_FCST()
         self.ui.setupUi(self)
+        print("Loading Taiwan Weather Data......")
         self.FCST_data = None
         # self.WX_img = None
         # self.setWindowIcon(QIcon("weather-forecast.png"))
@@ -104,51 +109,66 @@ class AppWindow(QWidget):
         self.ui.Info_Table.setColumnCount(0)
         self.ui.Info_Table.setRowCount(0)
         self.FCST_data = FCST_data_refresh_ETL()
-        self.ui.Refresh_Button.clicked.connect(self.Refresh_Button_Clicked)
-        self.ui.Search_Button.clicked.connect(self.Search_Button_Clicked)
+        self.ui.Region_ComboBox.clear()
+        self.ui.Region_ComboBox.addItem("所有地區")
+        self.ui.region_list = sorted(set(self.FCST_data["Region"]))
+        for region in self.ui.region_list:
+            self.ui.Region_ComboBox.addItem(region)
         self.ui.Location_ComboBox.clear()
-        # self.ui.Location_ComboBox.addItem("Choose City/County")
         self.ui.loc_list = sorted(set(self.FCST_data["Location"]))
         for loc in self.ui.loc_list:
             self.ui.Location_ComboBox.addItem(loc)
         self.ui.Location_ComboBox.setCurrentText("新竹市")
-        self.ui.Period_ComboBox.clear()
-        # self.ui.Period_ComboBox.addItem("Choose Time Period")
-        self.ui.Period_ComboBox.addItem("All")
-        self.ui.period_list = sorted(set(self.FCST_data["Period"]))
-        for period in self.ui.period_list:
-            self.ui.Period_ComboBox.addItem(period)
-        self.ui.Update_Time_Label.setText("Data Last Updated: " + datetime.now().strftime("%Y/%d/%m %H:%M:%S"))
+        self.ui.Refresh_Button.clicked.connect(self.Refresh_Button_Clicked)
+        self.ui.Search_Button.clicked.connect(self.Search_Button_Clicked)
+        self.ui.Region_ComboBox.currentTextChanged.connect(
+            lambda: self.Region_Change(self.ui.Region_ComboBox.currentText()))
+        self.ui.Update_Time_Label.setText("Data Last Updated: " + datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
+
+    def Region_Change(self, Region_Name):
+        if Region_Name is None:
+            return None
+        if Region_Name == "所有地區":
+            current_loc = self.ui.Location_ComboBox.currentText()
+            self.ui.Location_ComboBox.clear()
+            self.ui.loc_list = sorted(set(self.FCST_data["Location"]))
+            for loc in self.ui.loc_list:
+                self.ui.Location_ComboBox.addItem(loc)
+            self.ui.Location_ComboBox.setCurrentText(current_loc)
+        else:
+            df_table = self.FCST_data.copy()
+            df_table = df_table[df_table["Region"] == Region_Name]
+            self.ui.Location_ComboBox.clear()
+            self.ui.loc_list = sorted(set(df_table["Location"]))
+            for loc in self.ui.loc_list:
+                self.ui.Location_ComboBox.addItem(loc)
 
     def Refresh_Button_Clicked(self):
+        print("Refreshing Taiwan Weather Data......")
         current_loc = self.ui.Location_ComboBox.currentText()
         self.ui.Info_Table.clear()
         self.ui.Info_Table.setColumnCount(0)
         self.ui.Info_Table.setRowCount(0)
         self.FCST_data = FCST_data_refresh_ETL()
+        self.ui.Region_ComboBox.clear()
+        self.ui.Region_ComboBox.addItem("所有地區")
+        self.ui.region_list = sorted(set(self.FCST_data["Region"]))
+        for region in self.ui.region_list:
+            self.ui.Region_ComboBox.addItem(region)
         self.ui.Location_ComboBox.clear()
-        # self.ui.Location_ComboBox.addItem("Choose City/County")
         self.ui.loc_list = sorted(set(self.FCST_data["Location"]))
         for loc in self.ui.loc_list:
             self.ui.Location_ComboBox.addItem(loc)
         self.ui.Location_ComboBox.setCurrentText(current_loc)
-        self.ui.Period_ComboBox.clear()
-        # self.ui.Period_ComboBox.addItem("Choose Time Period")
-        self.ui.Period_ComboBox.addItem("All")
-        self.ui.period_list = sorted(set(self.FCST_data["Period"]))
-        for period in self.ui.period_list:
-            self.ui.Period_ComboBox.addItem(period)
-        self.ui.Update_Time_Label.setText("Data Last Updated: " + datetime.now().strftime("%Y/%d/%m %H:%M:%S"))
+        self.ui.Update_Time_Label.setText("Data Last Updated: " + datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
+        print("Done!")
 
     def Search_Button_Clicked(self):
         self.ui.Info_Table.clear()
-        df_table = self.FCST_data.copy()[["Period", "Location", "Weather FCST", "Temperature",
+        df_table = self.FCST_data.copy()[["Period", "Region", "Location", "Weather FCST", "Temperature",
                                           "PoP", "Comfort Index"]]
-        if self.ui.Period_ComboBox.currentText() == "All":
-            df_table = df_table[df_table["Location"] == self.ui.Location_ComboBox.currentText()]
-        else:
-            df_table = df_table[(df_table["Location"] == self.ui.Location_ComboBox.currentText()) &
-                                (df_table["Period"] == self.ui.Period_ComboBox.currentText())]
+        df_table = df_table[df_table["Location"] == self.ui.Location_ComboBox.currentText()]
+
         df_table_nrows = df_table.shape[0]
         df_table_ncolumns = df_table.shape[1]
         df_table_columns_names = df_table.columns
@@ -164,6 +184,7 @@ class AppWindow(QWidget):
                 new_item.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                 self.ui.Info_Table.setItem(i, j, new_item)
                 self.ui.Info_Table.horizontalHeader().setSectionResizeMode(j, QHeaderView.ResizeToContents)
+        print(self.ui.Location_ComboBox.currentText())
 
 
 if __name__ == "__main__":
