@@ -24,6 +24,7 @@ import urllib.request
 import json
 import numpy as np
 from datetime import datetime
+from apikeyconfig import api_key_WF
 
 import ssl
 
@@ -40,7 +41,7 @@ def FCST_data_refresh_ETL():
     TW_Region = pd.read_csv(
         "https://github.com/LeBronWilly/TW_Weather_FCST/raw/main/TW_Region.csv",
         encoding='utf8')
-    api_key_WF = "CWB-4FB338DD-B0B6-49EC-BDD4-8293D48B8071"
+    # api_key_WF = "XXX"
     data_source = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization="+api_key_WF+"&format=JSON&locationName=&elementName=&sort=time"
     json_url = urllib.request.urlopen(data_source)
     data = json.loads(json_url.read())

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on 01/14, 2023 (Happy Lunar New Year!)
-@author: Willy Fang (WillyF)
+Created on 04/15, 2023
+@author: WillyF
 
 """
 
@@ -11,19 +11,20 @@ Created on 01/14, 2023 (Happy Lunar New Year!)
 # https://pandas.pydata.org/docs/reference/api/pandas.pivot_table.html
 # https://stackoverflow.com/questions/31306741/unmelt-pandas-dataframe
 # https://medium.com/%E6%95%B8%E6%93%9A%E4%B8%8D%E6%AD%A2-not-only-data/pandas-%E5%BF%AB%E9%80%9F%E7%9E%AD%E8%A7%A3-pivot-table-%E8%88%87%E6%87%89%E7%94%A8-21e4c37b9216
-# https://www.geeksforgeeks.org/python-pandas-series-str-cat-to-concatenate-string/
-# https://www.udacity.com/blog/2021/11/__init__-in-python-an-overview.html
-# https://stackoverflow.com/questions/12646326/calling-a-class-function-inside-of-init
-# https://www.geeksforgeeks.org/ways-to-filter-pandas-dataframe-by-column-values/
-# https://doc.qt.io/qt-5/qheaderview.html#ResizeMode-enum
+# https://docs.python.org/3/library/stdtypes.html#str.isdigit
+# https://datagy.io/python-string-to-date/
+# https://www.itsolutionstuff.com/post/how-to-check-if-today-is-wednesday-or-not-in-pythonexample.html
+# https://stackoverflow.com/questions/19289171/importing-a-variable-from-one-python-script-to-another
+# https://blog.netwrix.com/2022/11/14/how-to-hide-api-keys-github/
 
 
 from UI_V02 import *
 import pandas as pd
 import urllib.request
 import json
-import numpy as np
+# import numpy as np
 from datetime import datetime
+from apikeyconfig import api_key_WF
 
 import ssl
 
@@ -40,45 +41,80 @@ def FCST_data_refresh_ETL():
     TW_Region = pd.read_csv(
         "https://github.com/LeBronWilly/TW_Weather_FCST/raw/main/TW_Region.csv",
         encoding='utf8')
-    api_key_WF = "CWB-4FB338DD-B0B6-49EC-BDD4-8293D48B8071"
-    data_source = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization="+api_key_WF+"&format=JSON&locationName=&elementName=&sort=time"
+    # api_key_WF = "XXXXX"
+    data_source = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization="+api_key_WF+"&sort=time"
     json_url = urllib.request.urlopen(data_source)
     data = json.loads(json_url.read())
+    days_name = ["Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat.", "Sun."]
     data_df = pd.json_normalize(data["records"],
-                                record_path=["location", "weatherElement", "time"],
-                                meta=[['location', "locationName"],
-                                      ['location', "weatherElement", "elementName"],
-                                      'datasetDescription',
-                                      ],
-                                )
-    data_df.columns = [x.split(".")[-1] for x in data_df.columns]
-    data_df["parameterUnit"].replace("百分比", "%", inplace=True)
-    data_df["parameterUnit"].replace("C", "°C", inplace=True)
-    data_df["parameterUnit"].replace(np.nan, "", inplace=True)
-    data_df["elementName"].replace("Wx", "Weather Forcast", inplace=True)
-    data_df["elementName"].replace("PoP", "Probability of Precipitation", inplace=True)
-    data_df["elementName"].replace("MinT", "Min Temperature", inplace=True)
-    data_df["elementName"].replace("MaxT", "Max Temperature", inplace=True)
-    data_df["elementName"].replace("CI", "Comfort Index", inplace=True)
-    data_df["Parameter"] = data_df["parameterName"] + data_df["parameterUnit"]
-    data_df["startTime"] = data_df["startTime"].apply(lambda x: x.replace("-", "/")[:-3])
-    data_df["endTime"] = data_df["endTime"].apply(lambda x: x.replace("-", "/")[:-3])
-    data_df = data_df.merge(TW_Region, how="left", left_on='locationName', right_on='City/County',
-                            validate="many_to_one")
-    data_df["locationName"].replace("臺", "台", inplace=True, regex=True)
+                                record_path=['locations', "location", "weatherElement", 'time', "elementValue"],
+                                meta=[['locations', 'location', 'locationName'],
+                                      ['locations', 'location', 'lon'],
+                                      ['locations', 'location', 'lat'],
+                                      ['locations', "location", "weatherElement", "elementName"],
+                                      ['locations', "location", "weatherElement", "description"],
+                                      ['locations', "location", "weatherElement", 'time', "startTime"],
+                                      ['locations', "location", "weatherElement", 'time', "endTime"]])
+    data_df.columns = ["Value", "Unit", "Location", "Long", "Lat", "Element_EN", "Element", "StartTime", "EndTime"]
+    data_df = data_df[["StartTime", "EndTime", "Location", "Element", "Element_EN", "Value", "Unit", "Long", "Lat"]]
+    data_df = data_df[data_df["Unit"] != "自定義 Wx 單位"].reset_index(drop=True)
+    data_df["Unit"].replace("百分比", "%", inplace=True)
+    data_df["Unit"].replace("8方位", "", inplace=True)
+    data_df["Unit"].replace("紫外線指數", "", inplace=True)
+    data_df["Unit"].replace("攝氏度", "°C", inplace=True)
+    data_df["Unit"].replace("公尺/秒", "m/s", inplace=True)
+    data_df["Unit"].replace("自定義 CI 文字", "", inplace=True)
+    data_df["Unit"].replace("自定義 Wx 文字", "", inplace=True)
+    data_df["Unit"].replace("自定義 Wx 單位", "", inplace=True)
+    data_df.loc[(data_df["Element"].str.contains("紫外線指數")) & (data_df["Unit"].str.contains("曝曬級數")),
+    "Element"] = "曝曬級數"
+    data_df.loc[(data_df["Element"].str.contains("最大風速")) & (data_df["Unit"].str.contains("蒲福風級")),
+    "Element"] = "蒲福風級"
+    data_df.loc[(data_df["Element"].str.contains("最大舒適度指數")) & (~data_df["Value"].str.isdigit()),
+    "Element"] = "最大舒適度"
+    data_df.loc[(data_df["Element"].str.contains("最小舒適度指數")) & (~data_df["Value"].str.isdigit()),
+    "Element"] = "最小舒適度"
+    data_df["Unit"].replace("曝曬級數", "", inplace=True)
+    data_df["Unit"].replace("蒲福風級", "", inplace=True)
+    data_df["Unit"].replace("NA", "", inplace=True)
+    data_df["Unit"].replace("NA ", "", inplace=True)
+    data_df["Unit"].replace(" ", "", inplace=True)
+    data_df["Value"].replace("<= 1", "≤1", inplace=True)
+    data_df["Parameter"] = data_df["Value"] + data_df["Unit"]
+    data_df["Parameter"].replace(" %", "-", inplace=True)
+    data_df["StartTime"] = data_df["StartTime"].apply(lambda x: x.replace("-", "/")[:-3])
+    data_df["StartTime"] = data_df["StartTime"].apply(
+        lambda x: x + " (" + days_name[datetime.strptime(x, '%Y/%m/%d %H:%M').weekday()] + ")")
+    data_df["EndTime"] = data_df["EndTime"].apply(lambda x: x.replace("-", "/")[:-3])
+    data_df["EndTime"] = data_df["EndTime"].apply(
+        lambda x: x + " (" + days_name[datetime.strptime(x, '%Y/%m/%d %H:%M').weekday()] + ")")
+    data_df = data_df.merge(TW_Region, how="left", left_on='Location', right_on='City/County', validate="many_to_one")
+    data_df["Location"].replace("臺", "台", inplace=True, regex=True)
+    data_df["Long"] = data_df["Long"].astype(float)
+    data_df["Lat"] = data_df["Lat"].astype(float)
     data_df_pivot = pd.pivot_table(data_df,
-                                   index=["startTime", "endTime", "Region", 'locationName'],
-                                   columns=["elementName"],
+                                   index=["StartTime", "EndTime", "Region", 'Location'],
+                                   columns=["Element"],
                                    values=["Parameter"],
                                    aggfunc=lambda x: x).reset_index()
-    data_df_pivot.columns = ["startTime", "endTime", "Region", "locationName", "Comfort Index",
-                             "Max Temperature", "Min Temperature", "Probability of Precipitation", "Weather Forcast"]
-    data_df_pivot = data_df_pivot.sort_values(by=["locationName", "startTime", "endTime"]).reset_index(drop=True)
-    data_df_pivot["Period"] = data_df_pivot["startTime"].str.cat(data_df_pivot["endTime"], sep=" ~ ")
-    data_df_pivot["Temperature"] = data_df_pivot["Max Temperature"].str.cat(data_df_pivot["Min Temperature"], sep=" ~ ")
-    data_df_pivot = data_df_pivot.rename(
-        columns={"locationName": "Location", "Probability of Precipitation": "PoP", "Weather Forcast": "Weather FCST"},
-        errors="raise")
+    data_df_pivot.columns = ["StartTime", "EndTime", "Region", "Location", "12hr PoP", "Weather FCST", "Weather Desc",
+                             "AvgT",
+                             "AvgRH", "AvgDPT", "EL", "MinT", "MinAT", "MaxC", "MaxCI",
+                             "MaxWS", "MinC", "MinCI", "MaxT", "MaxAT", "UVI", "BWS", "WD"]
+    # 平均相對濕度、平均露點溫度、曝曬級數、蒲福風級
+    data_df_pivot = data_df_pivot.sort_values(by=["Region", "Location", "StartTime", "EndTime"]).reset_index(drop=True)
+    data_df_pivot["Period"] = data_df_pivot["StartTime"].str.cat(data_df_pivot["EndTime"], sep=" ~ ")
+    data_df_pivot["T"] = data_df_pivot["MinT"].str.cat(data_df_pivot["MaxT"], sep=" ~ ")
+    data_df_pivot["AT"] = data_df_pivot["MinAT"].str.cat(data_df_pivot["MaxAT"], sep=" ~ ")
+    data_df_pivot["C"] = data_df_pivot["MinC"].str.cat(data_df_pivot["MaxC"], sep=" ~ ")
+    data_df_pivot["CI"] = data_df_pivot["MinCI"].str.cat(data_df_pivot["MaxCI"], sep=" ~ ")
+    data_df_pivot["EL"].fillna("-", inplace=True)
+    data_df_pivot["CI"] = data_df_pivot["CI"] + " (" + data_df_pivot["C"] + ")"
+    data_df_pivot["UVI"] = data_df_pivot["UVI"] + " (" + data_df_pivot["EL"] + ")"
+    data_df_pivot["UVI"].fillna("-", inplace=True)
+    data_df_pivot = data_df_pivot[["Period", "Region", "Location", "Weather FCST", "12hr PoP", "T", "AvgT", "AT",
+                                   "AvgRH", "AvgDPT", "UVI",
+                                   "MaxWS", "BWS", "WD", "CI", "Weather Desc"]]
     return data_df_pivot
 
 
@@ -110,6 +146,11 @@ class AppWindow(QWidget):
         self.ui.Info_Table.setColumnCount(0)
         self.ui.Info_Table.setRowCount(0)
         self.FCST_data = FCST_data_refresh_ETL()
+        self.ui.Period_ComboBox.clear()
+        self.ui.Period_ComboBox.addItem("所有期間")
+        self.ui.period_list = sorted(set(self.FCST_data["Period"]))
+        for period in self.ui.period_list:
+            self.ui.Period_ComboBox.addItem(period)
         self.ui.Region_ComboBox.clear()
         self.ui.Region_ComboBox.addItem("所有地區")
         self.ui.region_list = sorted(set(self.FCST_data["Region"]))
@@ -131,6 +172,11 @@ class AppWindow(QWidget):
             return None
         if Region_Name == "所有地區":
             current_loc = self.ui.Location_ComboBox.currentText()
+            # self.ui.Period_ComboBox.clear()
+            # self.ui.Period_ComboBox.addItem("所有期間")
+            # self.ui.period_list = sorted(set(self.FCST_data["Period"]))
+            # for period in self.ui.period_list:
+            #     self.ui.Period_ComboBox.addItem(period)
             self.ui.Location_ComboBox.clear()
             self.ui.loc_list = sorted(set(self.FCST_data["Location"]))
             for loc in self.ui.loc_list:
@@ -139,6 +185,11 @@ class AppWindow(QWidget):
         else:
             df_table = self.FCST_data.copy()
             df_table = df_table[df_table["Region"] == Region_Name]
+            # self.ui.Period_ComboBox.clear()
+            # self.ui.Period_ComboBox.addItem("所有期間")
+            # self.ui.period_list = sorted(set(df_table["Period"]))
+            # for period in self.ui.period_list:
+            #     self.ui.Period_ComboBox.addItem(period)
             self.ui.Location_ComboBox.clear()
             self.ui.loc_list = sorted(set(df_table["Location"]))
             for loc in self.ui.loc_list:
@@ -151,6 +202,11 @@ class AppWindow(QWidget):
         self.ui.Info_Table.setColumnCount(0)
         self.ui.Info_Table.setRowCount(0)
         self.FCST_data = FCST_data_refresh_ETL()
+        self.ui.Period_ComboBox.clear()
+        self.ui.Period_ComboBox.addItem("所有期間")
+        self.ui.period_list = sorted(set(self.FCST_data["Period"]))
+        for period in self.ui.period_list:
+            self.ui.Period_ComboBox.addItem(period)
         self.ui.Region_ComboBox.clear()
         self.ui.Region_ComboBox.addItem("所有地區")
         self.ui.region_list = sorted(set(self.FCST_data["Region"]))
