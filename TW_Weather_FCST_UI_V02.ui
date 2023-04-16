@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>950</width>
-    <height>591</height>
+    <width>1841</width>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>TW_Weather_FCST</string>
+   <string>7-Day Taiwan Weather Forecast</string>
   </property>
   <widget class="QPushButton" name="Refresh_Button">
    <property name="enabled">
@@ -19,8 +19,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>520</y>
+     <x>520</x>
+     <y>540</y>
      <width>201</width>
      <height>41</height>
     </rect>
@@ -41,7 +41,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>150</y>
+     <y>70</y>
      <width>301</width>
      <height>41</height>
     </rect>
@@ -65,7 +65,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>560</y>
+     <y>580</y>
      <width>411</width>
      <height>31</height>
     </rect>
@@ -89,8 +89,8 @@
   <widget class="QLabel" name="Pic_Label">
    <property name="geometry">
     <rect>
-     <x>730</x>
-     <y>510</y>
+     <x>1730</x>
+     <y>530</y>
      <width>80</width>
      <height>80</height>
     </rect>
@@ -117,7 +117,7 @@
    <property name="geometry">
     <rect>
      <x>320</x>
-     <y>150</y>
+     <y>70</y>
      <width>331</width>
      <height>41</height>
     </rect>
@@ -140,7 +140,7 @@
   <widget class="QLabel" name="List_Label_2">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>950</x>
      <y>70</y>
      <width>301</width>
      <height>41</height>
@@ -164,9 +164,9 @@
   <widget class="QComboBox" name="Region_ComboBox">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>1240</x>
      <y>70</y>
-     <width>331</width>
+     <width>351</width>
      <height>41</height>
     </rect>
    </property>
@@ -189,9 +189,9 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>360</y>
-     <width>891</width>
-     <height>141</height>
+     <y>310</y>
+     <width>1781</width>
+     <height>211</height>
     </rect>
    </property>
    <property name="font">
@@ -208,7 +208,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>310</y>
+     <y>250</y>
      <width>411</width>
      <height>41</height>
     </rect>
@@ -237,9 +237,9 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>310</y>
-     <width>241</width>
+     <x>480</x>
+     <y>250</y>
+     <width>291</width>
      <height>41</height>
     </rect>
    </property>
@@ -258,7 +258,7 @@
   <widget class="QLabel" name="Update_Time_Label">
    <property name="geometry">
     <rect>
-     <x>510</x>
+     <x>1400</x>
      <y>10</y>
      <width>411</width>
      <height>31</height>
@@ -287,8 +287,8 @@
    <property name="geometry">
     <rect>
      <x>320</x>
-     <y>230</y>
-     <width>601</width>
+     <y>170</y>
+     <width>581</width>
      <height>41</height>
     </rect>
    </property>
@@ -311,7 +311,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>230</y>
+     <y>170</y>
      <width>301</width>
      <height>41</height>
     </rect>
@@ -331,6 +331,78 @@
     <set>Qt::AlignJustify|Qt::AlignVCenter</set>
    </property>
   </widget>
+  <widget class="QLabel" name="List_Label_4">
+   <property name="geometry">
+    <rect>
+     <x>950</x>
+     <y>170</y>
+     <width>351</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>16</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Fields Description:</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="List_Label_5">
+   <property name="geometry">
+    <rect>
+     <x>950</x>
+     <y>220</y>
+     <width>861</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>9</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>    12hr PoP          T         AvgT          AT             AvgRH            AvgDPT            UVI          MaxWS       BWS       WD       CI</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="List_Label_6">
+   <property name="geometry">
+    <rect>
+     <x>950</x>
+     <y>250</y>
+     <width>861</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>8</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>12小時降雨機率　溫度　平均溫度　體感溫度　平均相對濕度　平均露點溫度　紫外線指數　最大風速　蒲福風級　風向　舒適度</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+   </property>
+  </widget>
   <zorder>Pic_Label</zorder>
   <zorder>List_Label</zorder>
   <zorder>WillyF_Label</zorder>
@@ -340,10 +412,13 @@
   <zorder>label_4</zorder>
   <zorder>Search_Button</zorder>
   <zorder>Update_Time_Label</zorder>
-  <zorder>List_Label_2</zorder>
-  <zorder>Region_ComboBox</zorder>
   <zorder>Period_ComboBox</zorder>
   <zorder>List_Label_3</zorder>
+  <zorder>Region_ComboBox</zorder>
+  <zorder>List_Label_2</zorder>
+  <zorder>List_Label_4</zorder>
+  <zorder>List_Label_5</zorder>
+  <zorder>List_Label_6</zorder>
  </widget>
  <resources/>
  <connections/>

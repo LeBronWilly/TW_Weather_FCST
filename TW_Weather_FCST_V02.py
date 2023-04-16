@@ -42,7 +42,7 @@ def FCST_data_refresh_ETL():
         "https://github.com/LeBronWilly/TW_Weather_FCST/raw/main/TW_Region.csv",
         encoding='utf8')
     # api_key_WF = "XXXXX"
-    data_source = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization="+api_key_WF+"&sort=time"
+    data_source = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=" + api_key_WF + "&sort=time"
     json_url = urllib.request.urlopen(data_source)
     data = json.loads(json_url.read())
     days_name = ["Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat.", "Sun."]
@@ -112,10 +112,13 @@ def FCST_data_refresh_ETL():
     data_df_pivot["CI"] = data_df_pivot["CI"] + " (" + data_df_pivot["C"] + ")"
     data_df_pivot["UVI"] = data_df_pivot["UVI"] + " (" + data_df_pivot["EL"] + ")"
     data_df_pivot["UVI"].fillna("-", inplace=True)
-    data_df_pivot = data_df_pivot[["Period", "Region", "Location", "Weather FCST", "12hr PoP", "T", "AvgT", "AT",
-                                   "AvgRH", "AvgDPT", "UVI",
+    data_df_pivot = data_df_pivot[["Period", "Region", "Location", "Weather FCST", "12hr PoP", "T", "AvgT",
+                                   "AT", "AvgRH", "AvgDPT", "UVI",
                                    "MaxWS", "BWS", "WD", "CI", "Weather Desc"]]
     return data_df_pivot
+
+
+Region_Order = {"北部地區": 0, "中部地區": 1, "南部地區": 2, "東部地區": 3, "外島地區": 4}
 
 
 class AppWindow(QWidget):
@@ -152,8 +155,8 @@ class AppWindow(QWidget):
         for period in self.ui.period_list:
             self.ui.Period_ComboBox.addItem(period)
         self.ui.Region_ComboBox.clear()
-        self.ui.Region_ComboBox.addItem("所有地區")
-        self.ui.region_list = sorted(set(self.FCST_data["Region"]))
+        self.ui.Region_ComboBox.addItem("所有地區 (北/中/南/東/外島)")
+        self.ui.region_list = sorted(set(self.FCST_data["Region"]), key=lambda x: Region_Order[x])
         for region in self.ui.region_list:
             self.ui.Region_ComboBox.addItem(region)
         self.ui.Location_ComboBox.clear()
@@ -162,7 +165,9 @@ class AppWindow(QWidget):
             self.ui.Location_ComboBox.addItem(loc)
         self.ui.Location_ComboBox.setCurrentText("新竹市")
         self.ui.Refresh_Button.clicked.connect(self.Refresh_Button_Clicked)
-        self.ui.Search_Button.clicked.connect(self.Search_Button_Clicked)
+        self.ui.Search_Button.clicked.connect(
+            lambda: self.Search_Button_Clicked(self.ui.Location_ComboBox.currentText(),
+                                               self.ui.Period_ComboBox.currentText()))
         self.ui.Region_ComboBox.currentTextChanged.connect(
             lambda: self.Region_Change(self.ui.Region_ComboBox.currentText()))
         self.ui.Update_Time_Label.setText("Data Last Updated: " + datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
@@ -170,7 +175,7 @@ class AppWindow(QWidget):
     def Region_Change(self, Region_Name):
         if Region_Name is None:
             return None
-        if Region_Name == "所有地區":
+        if Region_Name == "所有地區 (北/中/南/東/外島)":
             current_loc = self.ui.Location_ComboBox.currentText()
             # self.ui.Period_ComboBox.clear()
             # self.ui.Period_ComboBox.addItem("所有期間")
@@ -208,8 +213,8 @@ class AppWindow(QWidget):
         for period in self.ui.period_list:
             self.ui.Period_ComboBox.addItem(period)
         self.ui.Region_ComboBox.clear()
-        self.ui.Region_ComboBox.addItem("所有地區")
-        self.ui.region_list = sorted(set(self.FCST_data["Region"]))
+        self.ui.Region_ComboBox.addItem("所有地區 (北/中/南/東/外島)")
+        self.ui.region_list = sorted(set(self.FCST_data["Region"]), key=lambda x: Region_Order[x])
         for region in self.ui.region_list:
             self.ui.Region_ComboBox.addItem(region)
         self.ui.Location_ComboBox.clear()
@@ -220,12 +225,16 @@ class AppWindow(QWidget):
         self.ui.Update_Time_Label.setText("Data Last Updated: " + datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
         print("Done!")
 
-    def Search_Button_Clicked(self):
+    def Search_Button_Clicked(self, LocationName, PeriodName):
         self.ui.Info_Table.clear()
-        df_table = self.FCST_data.copy()[["Period", "Region", "Location", "Weather FCST", "Temperature",
-                                          "PoP", "Comfort Index"]]
-        df_table = df_table[df_table["Location"] == self.ui.Location_ComboBox.currentText()]
-
+        # data_df_pivot[["Period", "Region", "Location", "Weather FCST", "12hr PoP", "T", "AvgT","AT",
+        #                "AvgRH", "AvgDPT", "UVI", "MaxWS", "BWS", "WD", "CI", "Weather Desc"]]
+        df_table = self.FCST_data.copy()[["Period", "Region", "Location", "Weather FCST", "12hr PoP", "T",
+                                          "AvgT", "AT", "AvgRH", "AvgDPT", "UVI", "MaxWS", "BWS", "WD", "CI"]]
+        if PeriodName == "所有期間":
+            PeriodName = ""
+        df_table = df_table[(df_table["Location"] == LocationName)]
+        df_table = df_table[(df_table["Period"].str.contains(PeriodName, regex=False))]
         df_table_nrows = df_table.shape[0]
         df_table_ncolumns = df_table.shape[1]
         df_table_columns_names = df_table.columns
@@ -241,7 +250,7 @@ class AppWindow(QWidget):
                 new_item.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                 self.ui.Info_Table.setItem(i, j, new_item)
                 self.ui.Info_Table.horizontalHeader().setSectionResizeMode(j, QHeaderView.ResizeToContents)
-        print(self.ui.Location_ComboBox.currentText())
+        print(LocationName, PeriodName)
 
 
 if __name__ == "__main__":
