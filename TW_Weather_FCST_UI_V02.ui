@@ -19,8 +19,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>540</y>
+     <x>690</x>
+     <y>550</y>
      <width>201</width>
      <height>41</height>
     </rect>
@@ -118,7 +118,7 @@
     <rect>
      <x>320</x>
      <y>70</y>
-     <width>331</width>
+     <width>351</width>
      <height>41</height>
     </rect>
    </property>
@@ -140,7 +140,7 @@
   <widget class="QLabel" name="List_Label_2">
    <property name="geometry">
     <rect>
-     <x>950</x>
+     <x>850</x>
      <y>70</y>
      <width>301</width>
      <height>41</height>
@@ -164,7 +164,7 @@
   <widget class="QComboBox" name="Region_ComboBox">
    <property name="geometry">
     <rect>
-     <x>1240</x>
+     <x>1140</x>
      <y>70</y>
      <width>351</width>
      <height>41</height>
@@ -237,9 +237,9 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>480</x>
+     <x>370</x>
      <y>250</y>
-     <width>291</width>
+     <width>251</width>
      <height>41</height>
     </rect>
    </property>
@@ -288,7 +288,7 @@
     <rect>
      <x>320</x>
      <y>170</y>
-     <width>581</width>
+     <width>351</width>
      <height>41</height>
     </rect>
    </property>
@@ -334,7 +334,7 @@
   <widget class="QLabel" name="List_Label_4">
    <property name="geometry">
     <rect>
-     <x>950</x>
+     <x>850</x>
      <y>170</y>
      <width>351</width>
      <height>41</height>
@@ -358,9 +358,9 @@
   <widget class="QLabel" name="List_Label_5">
    <property name="geometry">
     <rect>
-     <x>950</x>
+     <x>850</x>
      <y>220</y>
-     <width>861</width>
+     <width>961</width>
      <height>41</height>
     </rect>
    </property>
@@ -373,7 +373,7 @@
     </font>
    </property>
    <property name="text">
-    <string>    12hr PoP          T         AvgT          AT             AvgRH            AvgDPT            UVI          MaxWS       BWS       WD       CI</string>
+    <string>     12hr PoP　　　 T         AvgT          AT             AvgRH            AvgDPT            UVI          MaxWS       BWS       WD       CI</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignJustify|Qt::AlignVCenter</set>
@@ -382,16 +382,16 @@
   <widget class="QLabel" name="List_Label_6">
    <property name="geometry">
     <rect>
-     <x>950</x>
+     <x>850</x>
      <y>250</y>
-     <width>861</width>
+     <width>961</width>
      <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Arial</family>
-     <pointsize>8</pointsize>
+     <pointsize>9</pointsize>
      <weight>75</weight>
      <bold>true</bold>
     </font>
@@ -402,6 +402,223 @@
    <property name="alignment">
     <set>Qt::AlignJustify|Qt::AlignVCenter</set>
    </property>
+  </widget>
+  <widget class="QTableWidget" name="Field_Desc_Table">
+   <property name="geometry">
+    <rect>
+     <x>850</x>
+     <y>220</y>
+     <width>961</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::ActionsContextMenu</enum>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="sizeAdjustPolicy">
+    <enum>QAbstractScrollArea::AdjustIgnored</enum>
+   </property>
+   <attribute name="horizontalHeaderCascadingSectionResizes">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderCascadingSectionResizes">
+    <bool>false</bool>
+   </attribute>
+   <row>
+    <property name="text">
+     <string>Desc.</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </row>
+   <column>
+    <property name="text">
+     <string>12hr Pop</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>T</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>AvgT</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>AT</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>AvgRH</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>AvgDPT</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>UVI</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>MaxWS</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>BWS</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>WD</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>CI</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </column>
+   <item row="0" column="0">
+    <property name="text">
+     <string>12小時降雨機率</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="1">
+    <property name="text">
+     <string>溫度</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="2">
+    <property name="text">
+     <string>平均溫度</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="3">
+    <property name="text">
+     <string>體感溫度</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="4">
+    <property name="text">
+     <string>平均相對濕度</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="5">
+    <property name="text">
+     <string>平均露點溫度</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="6">
+    <property name="text">
+     <string>紫外線指數</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="7">
+    <property name="text">
+     <string>最大風速</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="8">
+    <property name="text">
+     <string>蒲福風級</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="9">
+    <property name="text">
+     <string>風向</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="10">
+    <property name="text">
+     <string>舒適度</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
   </widget>
   <zorder>Pic_Label</zorder>
   <zorder>List_Label</zorder>
@@ -419,6 +636,7 @@
   <zorder>List_Label_4</zorder>
   <zorder>List_Label_5</zorder>
   <zorder>List_Label_6</zorder>
+  <zorder>Field_Desc_Table</zorder>
  </widget>
  <resources/>
  <connections/>

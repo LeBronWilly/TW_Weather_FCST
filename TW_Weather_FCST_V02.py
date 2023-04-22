@@ -85,6 +85,7 @@ def FCST_data_refresh_ETL():
     data_df["StartTime"] = data_df["StartTime"].apply(lambda x: x.replace("-", "/")[:-3])
     data_df["StartTime"] = data_df["StartTime"].apply(
         lambda x: x + " (" + days_name[datetime.strptime(x, '%Y/%m/%d %H:%M').weekday()] + ")")
+    data_df["Date"] = data_df["StartTime"].apply(lambda x: x.split(" ")[0] + " " + x.split(" ")[-1])
     data_df["EndTime"] = data_df["EndTime"].apply(lambda x: x.replace("-", "/")[:-3])
     data_df["EndTime"] = data_df["EndTime"].apply(
         lambda x: x + " (" + days_name[datetime.strptime(x, '%Y/%m/%d %H:%M').weekday()] + ")")
@@ -93,13 +94,13 @@ def FCST_data_refresh_ETL():
     data_df["Long"] = data_df["Long"].astype(float)
     data_df["Lat"] = data_df["Lat"].astype(float)
     data_df_pivot = pd.pivot_table(data_df,
-                                   index=["StartTime", "EndTime", "Region", 'Location'],
+                                   index=["StartTime", "Date", "EndTime", "Region", 'Location'],
                                    columns=["Element"],
                                    values=["Parameter"],
                                    aggfunc=lambda x: x).reset_index()
-    data_df_pivot.columns = ["StartTime", "EndTime", "Region", "Location", "12hr PoP", "Weather FCST", "Weather Desc",
-                             "AvgT",
-                             "AvgRH", "AvgDPT", "EL", "MinT", "MinAT", "MaxC", "MaxCI",
+    data_df_pivot.columns = ["StartTime", "Date", "EndTime", "Region", "Location", "12hr PoP", "Weather FCST",
+                             "Weather Desc",
+                             "AvgT", "AvgRH", "AvgDPT", "EL", "MinT", "MinAT", "MaxC", "MaxCI",
                              "MaxWS", "MinC", "MinCI", "MaxT", "MaxAT", "UVI", "BWS", "WD"]
     # 平均相對濕度、平均露點溫度、曝曬級數、蒲福風級
     data_df_pivot = data_df_pivot.sort_values(by=["Region", "Location", "StartTime", "EndTime"]).reset_index(drop=True)
@@ -112,9 +113,10 @@ def FCST_data_refresh_ETL():
     data_df_pivot["CI"] = data_df_pivot["CI"] + " (" + data_df_pivot["C"] + ")"
     data_df_pivot["UVI"] = data_df_pivot["UVI"] + " (" + data_df_pivot["EL"] + ")"
     data_df_pivot["UVI"].fillna("-", inplace=True)
-    data_df_pivot = data_df_pivot[["Period", "Region", "Location", "Weather FCST", "12hr PoP", "T", "AvgT",
-                                   "AT", "AvgRH", "AvgDPT", "UVI",
-                                   "MaxWS", "BWS", "WD", "CI", "Weather Desc"]]
+    data_df_pivot = data_df_pivot[
+        ["Date", "Period", "Region", "Location", "Weather FCST", "12hr PoP", "T", "AvgT", "AT",
+         "AvgRH", "AvgDPT", "UVI",
+         "MaxWS", "BWS", "WD", "CI", "Weather Desc"]]
     return data_df_pivot
 
 
@@ -131,6 +133,7 @@ class AppWindow(QWidget):
         # self.WX_img = None
         # self.setWindowIcon(QIcon("weather-forecast.png"))
         self.setup_control()
+        print("Done!")
         self.show()
 
     def setup_control(self):
@@ -148,10 +151,13 @@ class AppWindow(QWidget):
         self.ui.Info_Table.clear()
         self.ui.Info_Table.setColumnCount(0)
         self.ui.Info_Table.setRowCount(0)
+        self.ui.Field_Desc_Table.resizeColumnsToContents()
+        # self.ui.Field_Desc_Table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.ui.Field_Desc_Table.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.FCST_data = FCST_data_refresh_ETL()
         self.ui.Period_ComboBox.clear()
         self.ui.Period_ComboBox.addItem("所有期間")
-        self.ui.period_list = sorted(set(self.FCST_data["Period"]))
+        self.ui.period_list = sorted(set(self.FCST_data["Date"]))
         for period in self.ui.period_list:
             self.ui.Period_ComboBox.addItem(period)
         self.ui.Region_ComboBox.clear()
@@ -209,7 +215,7 @@ class AppWindow(QWidget):
         self.FCST_data = FCST_data_refresh_ETL()
         self.ui.Period_ComboBox.clear()
         self.ui.Period_ComboBox.addItem("所有期間")
-        self.ui.period_list = sorted(set(self.FCST_data["Period"]))
+        self.ui.period_list = sorted(set(self.FCST_data["Date"]))
         for period in self.ui.period_list:
             self.ui.Period_ComboBox.addItem(period)
         self.ui.Region_ComboBox.clear()
@@ -234,7 +240,7 @@ class AppWindow(QWidget):
         if PeriodName == "所有期間":
             PeriodName = ""
         df_table = df_table[(df_table["Location"] == LocationName)]
-        df_table = df_table[(df_table["Period"].str.contains(PeriodName, regex=False))]
+        df_table = df_table[(df_table["Period"].str.contains(PeriodName.split(" ")[0], regex=False))]
         df_table_nrows = df_table.shape[0]
         df_table_ncolumns = df_table.shape[1]
         df_table_columns_names = df_table.columns
