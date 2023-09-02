@@ -8,5 +8,5 @@
 Download Application (.exe): [here](https://github.com/LeBronWilly/TW_Weather_FCST/releases)
 
 User Interface: <br>
-<img src="https://user-images.githubusercontent.com/38752414/233768128-f96a752a-cbba-49d9-a5b3-be114aa454ea.jpg" width=100% height=100%>
+<img src="https://github.com/LeBronWilly/TW_Weather_FCST/assets/38752414/05f2377f-4a5b-4ed7-8cb3-66a84b726e0f" width=100% height=100%>
 
