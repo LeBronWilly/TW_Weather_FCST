@@ -121,6 +121,7 @@ def FCST_data_refresh_ETL():
         ["Date", "Period", "Region", "Location", "Weather FCST", "12hr PoP", "T", "AvgT", "AT",
          "AvgRH", "AvgDPT", "UVI",
          "MaxWS", "BWS", "WD", "CI", "Weather Desc"]]
+    # For Graph
     data_df_pivot_graph['MinT'] = data_df_pivot_graph['MinT'].apply(lambda x: int(x.replace("°C", "")))
     data_df_pivot_graph['MaxT'] = data_df_pivot_graph['MaxT'].apply(lambda x: int(x.replace("°C", "")))
     data_df_pivot_graph["AvgT"] = data_df_pivot_graph["AvgT"].apply(lambda x: int(x.replace("°C", "")))
@@ -142,7 +143,7 @@ class AppWindow(QWidget):
         self.ui = Ui_TW_Weather_FCST()
         self.ui.setupUi(self)
         self.Chart_Plotly = QtWebEngineWidgets.QWebEngineView(self)
-        self.Chart_Plotly.setGeometry(QRect(30, 449, 1781, 311))
+        self.Chart_Plotly.setGeometry(QRect(30, 439, 1781, 381))
         self.Chart_Plotly.setContentsMargins(1, 1, 1, 1)
         print("Loading Taiwan Weather Data......")
         self.FCST_data = None
@@ -259,10 +260,15 @@ class AppWindow(QWidget):
             fig.add_trace(
                 go.Scatter(x=df["StartTime"], y=df[col], name=col, visible=True, mode="lines+markers+text",
                            text=df[col],
+                           # text=[str(label)+"°C" for label in df[col]],
                            textposition="top center", marker=dict(size=10, symbol="square"),
                            line=dict(shape='spline')))
         # fig.update_layout(xaxis=dict(tickformat='%Y-%m-%d', range=[df["StartTime"].min() - timedelta(hours=36), None]))
-        fig.update_layout(xaxis=dict(dtick='6H'))
+        fig.update_layout(xaxis=dict(dtick='6H',
+                                     tickvals=df["StartTime"],
+                                     tickformat="%Y<br>%m/%d<br>%H:%M",
+                                     tickangle=0,
+                                     ))
         fig.update_layout(
             margin=dict(l=0, r=0, t=10, b=0),
         )
