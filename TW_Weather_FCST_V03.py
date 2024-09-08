@@ -44,7 +44,7 @@ def FCST_data_refresh_ETL():
         "https://github.com/LeBronWilly/TW_Weather_FCST/raw/main/TW_Region.csv",
         encoding='utf8')
     # api_key_WF = "XXXXX"
-    data_source = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=" + api_key_WF + "&sort=time"
+    data_source = "https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=" + api_key_WF + "&sort=time"
     json_url = urllib.request.urlopen(data_source)
     data = json.loads(json_url.read())
     days_name = ["Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat.", "Sun."]
